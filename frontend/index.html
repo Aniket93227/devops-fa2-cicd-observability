@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps FA2 Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 750px;
+            margin: 60px auto;
+            padding: 24px;
+            background: #f3f6fb;
+            color: #1f2937;
+        }
+        main {
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px #00000012;
+        }
+        .status {
+            padding: 12px;
+            border-radius: 8px;
+            background: #e5e7eb;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>DevOps FA2 Dashboard</h1>
+        <p>CI/CD, Kubernetes and Observability</p>
+
+        <h2>Frontend</h2>
+        <p class="status">Frontend is running through Nginx.</p>
+
+        <h2>Backend API</h2>
+        <p id="backend-status" class="status">Checking backend...</p>
+        <pre id="backend-data"></pre>
+    </main>
+
+    <script>
+        async function checkBackend() {
+            const status = document.getElementById("backend-status");
+            const data = document.getElementById("backend-data");
+
+            try {
+                const response = await fetch("/api/health");
+                if (!response.ok) throw new Error("Backend request failed");
+
+                const result = await response.json();
+                status.textContent = "Backend status: " + result.status;
+                data.textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                status.textContent =
+                    "Backend is not connected yet. We will configure the connection next.";
+                data.textContent = "";
+            }
+        }
+
+        checkBackend();
+    </script>
+</body>
+</html>
